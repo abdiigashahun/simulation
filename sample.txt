@@ -1,0 +1,2 @@
+This is a benign sample file used for the safe virus simulation.
+Do not use real files when experimenting. Keep everything inside a sandboxed folder.
