@@ -7,7 +7,8 @@ This repository provides a safe, non-destructive educational simulation of how a
 Files added:
 
 - `simulated_virus.py` — a safe simulator that creates an "infected" copy of a target file by appending a benign marker. It never overwrites the original and does not spread.
-- `antivirus_detector.py` — a simple detector that looks for the simulator's benign marker in files.
+- `antivirus_detector.py` — a detector that uses a tiny JSON-based signature database, supports recursive scanning, and can optionally quarantine infected files.
+- `signatures.json` — a small JSON array containing signature IDs used by the detector.
 - `sample.txt` — a harmless sample file used for the demo.
 - `tests.py` — a small test harness that runs the simulator and detector and prints results.
 
@@ -24,4 +25,23 @@ Safety notes:
 - NEVER run malware on real data or outside of a sandbox. Use virtual machines or disposable containers for experiments.
 - The provided code is intentionally harmless. It writes a separate file and detects a plaintext marker.
 
-If you'd like, I can extend the detector to use file hashing, maintain a local signature database, or add unit tests. Tell me which safe direction you'd like to explore next.
+Additional features (safe and educational):
+
+- Signature database: `signatures.json` contains an array of signature IDs used by the detector. You can add/remove signatures with the detector's CLI flags.
+- Recursive scan: pass `--recursive` (or `-r`) to scan directories recursively.
+- Quarantine: pass `--quarantine-dir <dir>` to move detected files into a quarantine folder (no permanent deletion).
+
+Examples:
+
+```bash
+# list signatures
+python3 antivirus_detector.py --list-signatures
+
+# add a signature
+python3 antivirus_detector.py --add-signature SIMULATOR_SIGNATURE_v2
+
+# scan current directory recursively and quarantine infected files
+python3 antivirus_detector.py . --recursive --quarantine-dir quarantine
+```
+
+If you'd like any of these safe extensions implemented (hashing, improved quarantine, unit tests, or a small UI), tell me which and I'll add it.

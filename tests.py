@@ -5,8 +5,8 @@ It:
  - runs the detector on both original and infected copy
 """
 from pathlib import Path
-from simulated_virus import infect_file, SIGNATURE
-from antivirus_detector import is_infected, scan_dir
+import subprocess
+from simulated_virus import infect_file
 
 
 def run():
@@ -17,10 +17,18 @@ def run():
     infected = infect_file(sample)
     print("Infected copy created:", infected)
 
-    print("Detector on original:", "Infected" if is_infected(sample) else "Clean")
-    print("Detector on infected copy:", "Infected" if is_infected(infected) else "Clean")
+    # Use the improved detector CLI
+    print('\n-- Detector on original --')
+    subprocess.run(["python3", "antivirus_detector.py", str(sample)])
 
-    print("Directory scan result:", scan_dir(Path('.')))
+    print('\n-- Detector on infected copy --')
+    subprocess.run(["python3", "antivirus_detector.py", str(infected)])
+
+    print('\n-- Directory scan (non-recursive) --')
+    subprocess.run(["python3", "antivirus_detector.py", "."])
+
+    print('\n-- Directory scan (recursive) --')
+    subprocess.run(["python3", "antivirus_detector.py", ".", "--recursive"])
 
 
 if __name__ == "__main__":
